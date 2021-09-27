@@ -1,0 +1,100 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Course";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+
+}
+@using Microsoft.AspNetCore.Http
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.Department)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Department)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.CourseTitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.CourseTitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.CourseNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.CourseNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.CourseDescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.CourseDescription)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.Credits)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Credits)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.MeetingDayOne)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.MeetingDayOne)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.MeetingDayTwo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.MeetingDayTwo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.MeetingDayThree)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.MeetingDayThree)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.MeetingStartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.MeetingStartTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course.MeetingEndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.MeetingEndTime)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Course.CourseID" />
+        <a asp-page="./Index" asp-route-id="@HttpContext.Session.GetString("UserId")">        
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        |</a>
+
+        <a asp-page="./Index" asp-route-id="@HttpContext.Session.GetString("UserId")">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,35 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Log In!";
+}
+
+<center><h2 >Welcome! Sign in or Sign Up</h2></center>
+
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-4 mt-5">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LogIn.EmailAddress" class="control-label">Email</label>
+                <input id="username" type="email" asp-for="LogIn.EmailAddress" class="form-control" />
+                <span asp-validation-for="LogIn.EmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LogIn.Password" class="control-label">Password</label>
+                <input id="password" type="password" asp-for="LogIn.Password" class="form-control" />
+                <span asp-validation-for="LogIn.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="padding-top:10px">
+                <input id="loginButton"type="submit" value="Log In" class="btn btn-primary" />
+            </div>
+        </form>
+        <form>
+            <p>Don't Have an Account? <a asp-area="" asp-page="/Users/Create">Sign Up Now!!</a></p>
+            
+            
+            
+        </form>
+    </div>
+</div>

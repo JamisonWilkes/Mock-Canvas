@@ -1,0 +1,130 @@
+﻿@page
+@model WebApplicationHW1.Pages.GradingModel
+@{
+}
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+}
+@using Microsoft.AspNetCore.Http
+
+
+<h1>Grading</h1>
+
+<div>
+    <h4>Assignment Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AssignmentSubmissions.Assignments.AssignmentTitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AssignmentSubmissions.Assignments.AssignmentTitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AssignmentSubmissions.Assignments.AssignmentDescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AssignmentSubmissions.Assignments.AssignmentDescription)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AssignmentSubmissions.Assignments.AssignmentMaxPoints)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AssignmentSubmissions.Assignments.AssignmentMaxPoints)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AssignmentSubmissions.Assignments.AssignmentDueDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AssignmentSubmissions.Assignments.AssignmentDueDate)
+        </dd>
+
+    </dl>
+</div>
+
+<form method="post">
+    <div>
+        <h4>Submission Details</h4>
+        <table class="table">
+
+            @if (AccountType == "Instructor")
+            {
+                <thead>
+                    <tr>
+                        <th>
+                            <a> @Html.DisplayNameFor(model => model.AssignmentSubmissions.SubmissionName)</a>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AssignmentSubmissions.TimeOfSubmission)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AssignmentSubmissions.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AssignmentSubmissions.LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AssignmentSubmissions.UserInfoID)
+                        </th>
+                    </tr>
+                </thead>
+            }
+            <tbody>
+
+                <tr>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.AssignmentSubmissions.TimeOfSubmission)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.AssignmentSubmissions.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.AssignmentSubmissions.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.AssignmentSubmissions.UserInfoID)
+                    </td>
+
+                    <td>
+                        <input name="assignmentGrade" />
+                    </td>
+
+                    <td>
+                        <input class="btn btn-primary m-4" type="submit" />
+                    </td>
+                    @if(@Model.AssignmentSubmissions.textEntrySubmission == null){
+                    <td>
+                        <a href="@Model.AssignmentSubmissions.SubmissionFilePath" download>@Model.AssignmentSubmissions.SubmissionName</a>
+                    </td>
+                    }
+                    else{
+                    
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Enter In Text</label>
+                            <textarea class="form-control" ID="textBox" rows="10" name="textEntry" >@Model.AssignmentSubmissions.textEntrySubmission</textarea>
+                        </div>
+                   
+                    }
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</form>

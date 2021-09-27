@@ -1,0 +1,70 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.Assignment.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+}
+
+@using Microsoft.AspNetCore.Http
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Edit Assignment</h2></center>
+        </div>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Assignments.AssignmentID" />
+                <div class="form-group">
+                    <label asp-for="Assignments.AssignmentTitle" class="control-label"></label>
+                    <input asp-for="Assignments.AssignmentTitle" class="form-control" />
+                    <span asp-validation-for="Assignments.AssignmentTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Assignments.AssignmentDescription" class="control-label"></label>
+                    <input asp-for="Assignments.AssignmentDescription" class="form-control" />
+                    <span asp-validation-for="Assignments.AssignmentDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Assignments.AssignmentMaxPoints" class="control-label"></label>
+                    <input asp-for="Assignments.AssignmentMaxPoints" class="form-control" />
+                    <span asp-validation-for="Assignments.AssignmentMaxPoints" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Assignments.AssignmentDueDate" class="control-label"></label>
+                    <input asp-for="Assignments.AssignmentDueDate" class="form-control" />
+                    <span asp-validation-for="Assignments.AssignmentDueDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-page="/Courses/CourseHomePage" asp-route-id=@HttpContext.Session.GetInt32("CourseID")>Back to List</a>
+    </div>
+</div>
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

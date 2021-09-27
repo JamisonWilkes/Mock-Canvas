@@ -1,0 +1,95 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+
+    Layout = "_DashboardInstructor";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+    List<Course> instructorCourses = HttpContext.Session.Get<Course>("InstructorCourses");
+
+    /*switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout  
+            Layout = "_DashboardInstructor";
+            break;
+    }*/
+}
+@using Microsoft.AspNetCore.Http
+@using WebApplicationHW1.Models
+
+<style>
+    #description {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+<div class="container-fluid ms-4" id="CourseList" >
+    <div class="row">
+        <div  class="col-md-12 main">
+            <center><h2 class="m-2" >Course List</h2></center>
+        </div>
+        <hr />
+    </div>
+    <div>
+        <!--<a asp-page="Create">Create New</a>-->
+        <a class="btn btn-primary m-4" asp-page="Create">Create Course</a>
+    </div>
+    <div class="row">
+        @if (instructorCourses.Count() == 0)
+        {
+            <div class="col-md-12 mt-3">
+                <center><h4>There are no active courses</h4></center>
+            </div>
+        }
+        else
+        {
+
+            @foreach (Course course in instructorCourses)
+            {
+                string dayOne = "";
+                string dayTwo = "";
+                string dayThree = "";
+
+                if (course.MeetingDayOne.Length > 0)
+                {
+                    dayOne = course.MeetingDayOne.Substring(0, 3);
+                }
+
+                if (course.MeetingDayTwo.Length > 0)
+                {
+                    dayTwo = course.MeetingDayTwo.Substring(0, 3);
+                }
+
+                if (course.MeetingDayThree.Length > 0)
+                {
+                    dayThree = course.MeetingDayThree.Substring(0, 3);
+                }
+
+                string startTime = course.MeetingStartTime.ToString(@"h\:mm");
+                string endTime = course.MeetingEndTime.ToString(@"h\:mm tt");
+
+                <div class="col-4 ">
+                    <div id="card" class="card text-white m-2 p-0">
+                        <div class="card-header m-2 text-center">@Html.DisplayFor(modelItem => course.CourseNumber)</div>
+                        <div class="card-body m-2 d-none d-lg-none d-xl-block">
+                            <h5 class="card-title d-none d-lg-none d-xl-block" id="description">@Html.DisplayFor(modelItem => course.CourseTitle)</h5>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Location: @Html.DisplayFor(modelItem => course.BuildingName) @Html.DisplayFor(modelItem => course.RoomNumber) </p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Days: @dayOne @dayTwo @dayThree  </p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Time: @startTime - @endTime </p>
+
+                        </div>
+                        <a asp-page="./Details" asp-route-id="@course.CourseID" class="stretched-link"></a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

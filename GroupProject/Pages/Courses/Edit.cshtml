@@ -1,0 +1,108 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+}
+@using Microsoft.AspNetCore.Http
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Edit Course</h2></center>
+        </div>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Course.CourseID" />
+                <div class="form-group">
+                    <label asp-for="Course.Department" class="control-label"></label>
+                    <input asp-for="Course.Department" class="form-control" />
+                    <span asp-validation-for="Course.Department" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.CourseTitle" class="control-label"></label>
+                    <input asp-for="Course.CourseTitle" class="form-control" />
+                    <span asp-validation-for="Course.CourseTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.CourseNumber" class="control-label"></label>
+                    <input asp-for="Course.CourseNumber" class="form-control" />
+                    <span asp-validation-for="Course.CourseNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.CourseDescription" class="control-label"></label>
+                    <input asp-for="Course.CourseDescription" class="form-control" />
+                    <span asp-validation-for="Course.CourseDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.Credits" class="control-label"></label>
+                    <input asp-for="Course.Credits" class="form-control" />
+                    <span asp-validation-for="Course.Credits" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.RoomNumber" class="control-label"></label>
+                    <input asp-for="Course.RoomNumber" class="form-control" />
+                    <span asp-validation-for="Course.RoomNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.BuildingName" class="control-label"></label>
+                    <input asp-for="Course.BuildingName" class="form-control" />
+                    <span asp-validation-for="Course.BuildingName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.MeetingDayOne" class="control-label"></label>
+                    <input asp-for="Course.MeetingDayOne" class="form-control" />
+                    <span asp-validation-for="Course.MeetingDayOne" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.MeetingDayTwo" class="control-label"></label>
+                    <input asp-for="Course.MeetingDayTwo" class="form-control" />
+                    <span asp-validation-for="Course.MeetingDayTwo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.MeetingDayThree" class="control-label"></label>
+                    <input asp-for="Course.MeetingDayThree" class="form-control" />
+                    <span asp-validation-for="Course.MeetingDayThree" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.MeetingStartTime" class="control-label"></label>
+                    <input asp-for="Course.MeetingStartTime" class="form-control" />
+                    <span asp-validation-for="Course.MeetingStartTime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Course.MeetingEndTime" class="control-label"></label>
+                    <input asp-for="Course.MeetingEndTime" class="form-control" />
+                    <span asp-validation-for="Course.MeetingEndTime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-page="./Index" asp-route-id="@HttpContext.Session.GetString("UserId")">Back to List</a>
+    </div>
+</div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

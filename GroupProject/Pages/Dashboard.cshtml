@@ -1,0 +1,304 @@
+﻿@page
+@model WebApplicationHW1.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+
+    //session Lists to store the active courses for instructor and student
+    List<Course> coursesList = HttpContext.Session.Get<Course>("CurrentCourses");
+    List<Course> instructorList = HttpContext.Session.Get<Course>("InstructorCourses");
+
+
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+}
+@using Microsoft.AspNetCore.Http
+@using WebApplicationHW1.Models
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <h2 class="m-2">Welcome, @HttpContext.Session.GetString("FirstName") </h2>
+        </div>
+        <hr />
+        <div>
+
+
+        </div>
+    </div>
+    <div class="row">
+        @if (AccountType == "Instructor")
+        {
+
+            if (instructorList.Count < 1)
+            {
+                <div class="col-md-12 mt-3">
+                    <center><h4>There are no active courses</h4></center>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12 mt-3">
+                    <center><h4>All Courses</h4></center>
+                </div>
+            }
+            foreach (Course course in instructorList)
+            {
+
+
+
+                string dayOne = "";
+                string dayTwo = "";
+                string dayThree = "";
+
+                //check if meeting days are present and shorten their values
+                if (course.MeetingDayOne.Length > 1)
+                {
+                    dayOne = course.MeetingDayOne.Substring(0, 3);
+                }
+
+                if (course.MeetingDayTwo.Length > 1)
+                {
+                    dayTwo = course.MeetingDayTwo.Substring(0, 3);
+                }
+
+                if (course.MeetingDayThree.Length > 1)
+                {
+                    dayThree = course.MeetingDayThree.Substring(0, 3);
+                }
+
+                //convert and format time from UTC to Standard
+                string startTime = course.MeetingStartTime.ToString(@"h\:mm");
+                string endTime = course.MeetingEndTime.ToString(@"h\:mm tt");
+
+                <div class="col-4 ">
+                    <div class="card text-white m-2 p-0">
+                        <div class="card-header m-2 text-center">@Html.DisplayFor(modelItem => course.CourseNumber)</div>
+                        <div class="card-body m-2 d-none d-lg-none d-xl-block">
+                            <h5 class="card-title d-none d-lg-none d-xl-block" id="description">@Html.DisplayFor(modelItem => course.CourseTitle)</h5>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Location: @Html.DisplayFor(modelItem => course.BuildingName) @Html.DisplayFor(modelItem => course.RoomNumber) </p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Days: @dayOne @dayTwo @dayThree  </p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Time: @startTime - @endTime </p>
+
+                        </div>
+                        <a asp-page="./Courses/CourseHomePage" asp-route-id="@course.CourseID" class="stretched-link"></a>
+                    </div>
+                </div>
+            }
+        }
+
+        @if (AccountType == "Student")
+        {
+            
+                if (coursesList == null)
+                {
+                <div class="col-md-12 mt-3">
+                    <center><h4>You are not currently registered in any courses</h4></center>
+
+                </div>
+                }
+                else
+                {
+                <div class="col-md-12 mt-3">
+                    <center><h4>All Courses</h4></center>
+                </div>
+                }
+                foreach (Course course in coursesList)
+                {
+
+                    string dayOne = "";
+                    string dayTwo = "";
+                    string dayThree = "";
+
+                    //check if meeting days are present and shorten their values
+                    if (course.MeetingDayOne.Length > 1)
+                    {
+                        dayOne = course.MeetingDayOne.Substring(0, 3);
+                    }
+
+                    if (course.MeetingDayTwo.Length > 1)
+                    {
+                        dayTwo = course.MeetingDayTwo.Substring(0, 3);
+                    }
+
+                    if (course.MeetingDayThree.Length > 1)
+                    {
+                        dayThree = course.MeetingDayThree.Substring(0, 3);
+                    }
+
+                    //convert and format time from UTC to Standard
+                    string startTime = course.MeetingStartTime.ToString(@"h\:mm");
+                    string endTime = course.MeetingEndTime.ToString(@"h\:mm tt");
+
+                <div class="col-4 ">
+                    <div class="card text-white m-2 p-0">
+                        <div class="card-header m-2 text-center">@Html.DisplayFor(modelItem => course.CourseNumber)</div>
+                        <div class="card-body m-2 d-none d-lg-none d-xl-block">
+                            <h5 class="card-title d-none d-lg-none d-xl-block" id="description">@Html.DisplayFor(modelItem => course.CourseTitle)</h5>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Instructor: @Html.DisplayFor(modelItem => course.InstructorLastName), @Html.DisplayFor(modelItem => course.InstructorFirstName)</p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Location: @Html.DisplayFor(modelItem => course.BuildingName) @Html.DisplayFor(modelItem => course.RoomNumber) </p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Days: @dayOne @dayTwo @dayThree  </p>
+                            <p class="card-text d-none m-0 d-lg-none d-xl-block">Time: @startTime - @endTime </p>
+
+                        </div>
+                        <a asp-page="./Courses/CourseHomePage" asp-route-id="@course.CourseID" class="stretched-link"></a>
+                    </div>
+                </div>
+
+                }
+            
+
+        }
+    </div>
+    @if (AccountType == "Student")
+    {
+
+        if (coursesList == null)
+        {
+            return;
+        }
+        <div class="col-md-12 mt-3">
+            <center><h4>All Assignments</h4></center>
+        </div>
+        <!--ALL ASSIGNMENTS-->
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Course</th>
+                    <th scope="col">Assignment</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+
+            @foreach (var assignment in Model.AllAssignments.OrderBy(assignment => assignment.AssignmentDueDate))
+            {
+                <tbody>
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => assignment.Course.CourseTitle)</td>
+                        <td>@Html.DisplayFor(modelItem => assignment.AssignmentTitle)</td>
+                        <td>@Html.DisplayFor(modelItem => assignment.AssignmentDueDate)</td>
+                        <td class="justify-content-center">
+                            <a class="btn btn-info" asp-page="./Courses/Assignment/Details" asp-route-id="@assignment.AssignmentID">Details</a>
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    }
+
+    <!--TO DO LIST-->
+    @if (AccountType == "Student")
+    {
+
+        <div class="card to-do-list">
+            <div class="card-header">
+                <h5 class="text-center">To Do List (@Model.OrderedFutureAssignments.Count):</h5>
+            </div>
+            <div>
+                <ul class="list-group">
+                    @if (Model.OrderedFutureAssignments.Count < 1)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        <li class="list-group-item m-1 shadow-lg" id="task">
+                            <div class="card p-0 m-0">
+                                <div class="card-body m-0" style="font-size: .9em;" id="description">
+                                    <b>@Model.OrderedFutureAssignments[0].Course.CourseTitle </b><br />
+                                    @Model.OrderedFutureAssignments[0].AssignmentTitle<br />
+                                    <p style="font-size: .8em;">Due: @Model.OrderedFutureAssignments[0].AssignmentDueDate.ToString("MMMM, dd")</p>
+                                    <a asp-page="/Courses/Assignment/Details" asp-route-id="@Model.OrderedFutureAssignments[0].AssignmentID" class="stretched-link"></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (Model.OrderedFutureAssignments.Count < 2)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        <li class="list-group-item m-1 shadow-lg" id="task">
+                            <div class="card p-0 m-0">
+                                <div class="card-body m-0" style="font-size: .9em;" id="description">
+                                    <b>@Model.OrderedFutureAssignments[1].Course.CourseTitle </b><br />
+                                    @Model.OrderedFutureAssignments[1].AssignmentTitle<br />
+                                    <p style="font-size: .8em;">Due: @Model.OrderedFutureAssignments[1].AssignmentDueDate.ToString("MMMM, dd")</p>
+                                    <a asp-page="/Courses/Assignment/Details" asp-route-id="@Model.OrderedFutureAssignments[1].AssignmentID" class="stretched-link"></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (Model.OrderedFutureAssignments.Count < 3)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        <li class="list-group-item m-1 shadow-lg" id="task">
+                            <div class="card p-0 m-0">
+                                <div class="card-body m-0" id="description" style="font-size: .9em;">
+                                    <b>@Model.OrderedFutureAssignments[2].Course.CourseTitle</b><br />
+                                    @Model.OrderedFutureAssignments[2].AssignmentTitle<br />
+                                    <p style="font-size: .8em;">Due: @Model.OrderedFutureAssignments[2].AssignmentDueDate.ToString("MMMM, dd")</p>
+                                    <a asp-page="/Courses/Assignment/Details" asp-route-id="@Model.OrderedFutureAssignments[2].AssignmentID" class="stretched-link"></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (Model.OrderedFutureAssignments.Count < 4)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        <li class="list-group-item m-1 shadow-lg" id="task">
+                            <div class="card p-0 m-0">
+                                <div class="card-body m-0" id="description" style="font-size: .9em;">
+                                    <b>@Model.OrderedFutureAssignments[3].Course.CourseTitle </b><br />
+                                    @Model.OrderedFutureAssignments[3].AssignmentTitle<br />
+                                    <p style="font-size: .8em;">Due: @Model.OrderedFutureAssignments[3].AssignmentDueDate.ToString("MMMM, dd")</p>
+                                    <a asp-page="/Courses/Assignment/Details" asp-route-id="@Model.OrderedFutureAssignments[3].AssignmentID" class="stretched-link"></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (Model.OrderedFutureAssignments.Count < 5)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        <li class="list-group-item m-1 shadow-lg" id="task">
+                            <div class="card p-0 m-0">
+                                <div class="card-body m-0" id="description" style="font-size: .9em;">
+                                    <b>@Model.OrderedFutureAssignments[4].Course.CourseTitle </b><br />
+                                    @Model.OrderedFutureAssignments[4].AssignmentTitle<br />
+                                    <p style="font-size: .8em;">Due: @Model.OrderedFutureAssignments[3].AssignmentDueDate.ToString("MMMM, dd")</p>
+                                    <a asp-page="/Courses/Assignment/Details" asp-route-id="@Model.OrderedFutureAssignments[4].AssignmentID" class="stretched-link"></a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+
+    }
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

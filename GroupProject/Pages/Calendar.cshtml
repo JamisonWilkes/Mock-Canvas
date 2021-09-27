@@ -1,0 +1,122 @@
+﻿@page
+@model WebApplicationHW1.Pages.CalendarModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    List<Course> coursesList = HttpContext.Session.Get<Course>("CurrentCourses");
+    List<Course> instructorList = HttpContext.Session.Get<Course>("InstructorCourses");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "Shared/_DashboardStudent.cshtml";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "Shared/_DashboardInstructor.cshtml";
+            break;
+    }
+
+
+
+}
+@using Microsoft.AspNetCore.Http
+@using WebApplicationHW1.Models
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>@ViewData["Title"] - Calendar</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href='~/lib/fullcalendar/fullcalendar-5.7.2/lib/main.css' rel='stylesheet' />
+    <meta charset='utf-8' />
+    <link href='fullcalendar/main.css' rel='stylesheet' />
+    <script src='~/lib/fullcalendar/fullcalendar-5.7.2/lib/main.min.js'></script>
+
+
+</head>
+<body>
+
+
+    <div id='calendar'></div>
+    <div id=" event"></div>
+    <table id="classMeetingTable">
+        @{
+            if (HttpContext.Session.GetString("AccountType") == "Instructor")
+            {
+                foreach (var item in Model.UserInfo.Courses)
+                {
+                    <tr>
+                        <td style="color:white">@item.CourseID</td>
+                        <td style="color:white">@item.CourseTitle</td>
+                        <td style="color:white">@item.Assignments</td>
+                        <td style="color:white">@item.MeetingStartTime</td>
+                        <td style="color:white">@item.MeetingEndTime</td>
+                        <td style="color:white">@item.MeetingDayOne.ToString()</td>
+                        <td style="color:white">@item.MeetingDayTwo.ToString()</td>
+                        <td style="color:white">@item.MeetingDayThree.ToString()</td>
+                        <td style="color:white">@item.MeetingDayThree.ToString()</td>
+
+                    </tr>
+                }
+
+            }
+            else if (HttpContext.Session.GetString("AccountType") == "Student")
+            {
+                @foreach (var item in Model.UserInfo.Registrations)
+                {
+                    <tr>
+                        <td style="color:white">@item.CourseID</td>
+                        <td style="color:white">@item.Course.CourseTitle</td>
+                        <td style="color:white">@item.Course.MeetingStartTime</td>
+                        <td style="color:white">@item.Course.MeetingEndTime</td>
+                        <td style="color:white">@item.Course.MeetingDayOne.ToString()</td>
+                        <td style="color:white">@item.Course.MeetingDayTwo.ToString()</td>
+                        <td style="color:white">@item.Course.MeetingDayThree.ToString()</td>
+
+                    </tr>
+
+                }
+
+            }
+
+        }
+
+    </table>
+    <table id="assignmentsDueTable">
+        @{
+            if (AccountType == "Student")
+            {
+                foreach (var item in Model.AllAssignments)
+                {
+
+                    <tr>
+                        <td style="color:white">@item.AssignmentID</td>
+                        <td style="color:white">@item.AssignmentTitle</td>
+                        <td style="color:white">@item.AssignmentDescription</td>
+                        <td style="color:white">@item.AssignmentDueDate</td>
+                        <td style="color:white">@item.AssignmentMaxPoints</td>
+                    </tr>
+
+                }
+            }
+
+        }
+    </table>
+
+
+    <script src='~/lib/fullcalendar/fullcalendar-5.7.2/lib/main.min.js'></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Calendar.js"></script>
+</body>
+</html>

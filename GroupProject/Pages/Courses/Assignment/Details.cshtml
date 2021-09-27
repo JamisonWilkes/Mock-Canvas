@@ -1,0 +1,267 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.Assignment.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+}
+
+@using Microsoft.AspNetCore.Http
+
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Assignment Details</h2></center>
+        </div>
+        <hr />
+    </div>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Assignments.AssignmentTitle)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Assignments.AssignmentTitle)
+            </dd>
+            <dt class="col-sm-2">
+                Description:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Assignments.AssignmentDescription)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Assignments.AssignmentMaxPoints)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Assignments.AssignmentMaxPoints)
+            </dd>
+            <dt class="col-sm-2">
+                Due Date:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Assignments.AssignmentDueDate)
+            </dd>
+        </dl>
+
+        <div id="barchart_values" style="width: 500px; height: 400px;"></div>
+
+        @{if (AccountType == "Instructor")
+            {
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                <script type="text/javascript">
+                    google.charts.load('current', { 'packages': ['bar'] });
+                    google.charts.setOnLoadCallback(drawChart);
+                    
+                    var scores = @Html.Raw(Json.Serialize(Model.scores));
+                    function drawChart() {
+
+                        var data = google.visualization.arrayToDataTable([
+                            [' ', '0-20%', '20-40%', '40-60%', '60-80%', '80-100%'],
+                            [' ', scores[0], scores[1], scores[2], scores[3], scores[4]]
+
+                        ]);
+
+                        var options = {
+                            chart: {
+                                title: 'Grade',
+                                tooltip: {
+                                    text: 'value'
+                                }
+
+                            },
+                            colors: ['#CC0000', '#cc5c00', '#99cc00', '#00cc7a', 'green'],
+
+                        };
+
+                        var chart = new google.charts.Bar(document.getElementById('barchart_values'));
+
+                            chart.draw(data, google.charts.Bar.convertOptions(options));
+                    }
+                </script>
+
+            }
+        }
+
+
+        
+    </div>
+    <div>
+        @if (AccountType == "Student")
+        {
+            //if (@Html.Raw(Json.Serialize(Model.submissions.Where(x => x.UserInfoID ))) != null) {
+            <head>
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                <script type="text/javascript">
+                    google.charts.load('current', { 'packages': ['bar'] });
+                    google.charts.setOnLoadCallback(drawChart);
+                    var average = @Html.Raw(Json.Serialize(Model.average));
+                    var low = @Html.Raw(Json.Serialize(Model.min));
+                    var high = @Html.Raw(Json.Serialize(Model.high));
+                    var grade = @Html.Raw(Json.Serialize(Model.grade));
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable([
+                            [' ', 'My Score', 'High', 'Average', 'Low'],
+                            [' ', grade, high, average, low]
+
+                        ]);
+                        
+                        var options = {
+                            chart: {
+                                title: 'Grade',
+                                tooltip: {
+                                    text: 'value'
+                                }
+                                
+                            },
+                            colors: ['#0047AB', 'green', '#cccc00', '#CC0000'],
+                            
+                        };
+
+                        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                        chart.draw(data, google.charts.Bar.convertOptions(options));
+                    }
+                </script>
+            </head>
+            <body>
+                <div id="columnchart_material" style="width: 800px; height: 500px;"></div>
+            </body>
+            //}
+
+
+            if (Model.Assignments.FileType == "File Submission")
+            {
+                <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Profile">
+                    <span>Upload Assignment:</span>
+                    <input type="file" name="postedFiles" />
+                    <input type="submit" value="Upload" />
+                    <br />
+                    <span style="color:green">@Html.Raw(ViewBag.Message)</span>
+                </form>
+            }
+            else if (Model.Assignments.FileType == "Text Entry")
+            {
+                <form method="post">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Enter In Text</label>
+                        <textarea class="form-control" ID="textBox" rows="10" name="textEntry"></textarea>
+                        <input type="submit" value="Submit" />
+                    </div>
+                </form>
+            }
+        }
+    </div>
+
+    @if ((string)TempData["Referrer"] == "SaveRegister")
+    {
+        <div class="alert alert-success">
+            <strong>Assignment Submitted Successfully</strong>
+        </div>
+    }
+
+    <table class="table">
+        @if (AccountType == "Student")
+        {
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].SubmissionName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].TimeOfSubmission)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].Grade)
+                    </th>
+                </tr>
+            </thead>
+        }
+        @if (AccountType == "Instructor")
+        {
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].SubmissionName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].TimeOfSubmission)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].UserInfoID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.submissions[0].Grade)
+                    </th>
+                </tr>
+            </thead>
+        }
+        <tbody>
+            <h2>Submissions</h2>
+            @foreach (var item in Model.submissions)
+            {
+                @if (AccountType == "Student")
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubmissionName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeOfSubmission)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Grade)
+                        </td>
+                    </tr>
+                }
+                @if (AccountType == "Instructor")
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubmissionName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeOfSubmission)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserInfoID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Grade)
+                        </td>
+                        <td>
+                            <a class="btn btn-primary m-4" asp-page="../../Grading" asp-route-id="@item.SubmissionID">Grade Assignment</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-page="/Courses/CourseHomePage" asp-route-id=@HttpContext.Session.GetInt32("CourseID")>Back to List</a>
+    </div>
+</div>

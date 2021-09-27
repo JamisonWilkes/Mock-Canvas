@@ -1,0 +1,124 @@
+﻿@page
+@model WebApplicationHW1.Pages.Registration.IndexModel
+
+@{
+    ViewData["Title"] = "Registration";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+
+    
+}
+@using Microsoft.AspNetCore.Http
+
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Course Registration</h2></center>
+        </div>
+        <hr />
+        <p>
+            <a class="btn btn-primary" asp-page="RegisteredClasses" asp-route-id=@Int32.Parse(HttpContext.Session.GetString("UserId"))>Back to Registered Classes</a>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <center><h4>Available Courses</h4></center>
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].Department)</th>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].CourseNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].CourseTitle)</th>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].Credits)</th>
+                    <th>Instructor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Course)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Credits)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InstructorLastName)
+                        </td>
+                        <td class="justify-content-center">
+                            <a class="btn btn-primary btn-sm" asp-page="./Add" asp-route-id="@item.CourseID">Add</a>
+                            <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.CourseID">Details</a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <center><h4>Registered Courses</h4></center>
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].Department)</th>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].CourseNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].CourseTitle)</th>
+                    <th>@Html.DisplayNameFor(model => model.Course[0].Credits)</th>
+                    <th>Instructor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.UserInfo.Registrations)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.Department)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.CourseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.CourseTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.Credits)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.InstructorLastName)
+                        </td>
+                        <td class="justify-content-center">
+                            <a class="btn btn-danger btn-sm" asp-page="./Drop" asp-route-id="@item.CourseID">Drop</a>
+                            <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.CourseID">Details</a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

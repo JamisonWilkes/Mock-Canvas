@@ -1,0 +1,144 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.CreateModel
+@{
+    ViewData["Title"] = "Create Course";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+}
+@using Microsoft.AspNetCore.Http
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Create Course</h2></center>
+        </div>
+        <hr />
+    </div>
+    <div class="row gutters-sm m-4">
+        <div class="col-md-12">
+            <form method="post">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <center><b>Department</b></center>
+                                <select name="Department" id="department" class="form-select">
+                                    <option value="">Select a Department</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="English">English</option>
+                                    <option value="Math">Math</option>
+                                    <option value="Health Science">Health Science</option>
+                                    <option value="Art">Art</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-4 justify-content-center">
+                            <div class="col-5">
+                                <center><b>@Html.DisplayNameFor(model => model.Course.CourseTitle)</b></center>
+                                <input asp-for="Course.CourseTitle" class="form-control" />
+                            </div>
+                            <div class="col-2">
+                                <center><b>@Html.DisplayNameFor(model => model.Course.CourseNumber)</b></center>
+                                <input asp-for="Course.CourseNumber" class="form-control" />
+                            </div>
+                            <div class="col-2">
+                                <center><b>@Html.DisplayNameFor(model => model.Course.Credits)</b></center>
+                                <input asp-for="Course.Credits" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row mt-4 justify-content-center">
+                            <center><b>Meeting Days</b></center>
+                        </div>
+                        <div class="row mt-1 justify-content-center">
+                            <div class="col-3">
+                                <select asp-for="Course.MeetingDayOne" name="Day One" id="meetingDayOne" class="form-select">
+                                    <option value="">Select a Day to Meet</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select asp-for="Course.MeetingDayTwo" name="Day Two" id="meetingDayTwo" class="form-select">
+                                    <option value="">Select a Day to Meet</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select asp-for="Course.MeetingDayThree" name="Day Three" id="meetingDayThree" class="form-select">
+                                    <option value="">Select a Day to Meet</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-4 justify-content-center">
+                            <div class="col-2">
+                                <center><b>Building</b></center>
+                                <input asp-for="Course.BuildingName" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <center><b>Room</b></center>
+                                <input asp-for="Course.RoomNumber" class="form-control" />
+                            </div>
+                            <div class="col-3">
+                                <center><b>Start Time</b></center>
+                                <input asp-for="Course.MeetingStartTime" class="form-control" />
+                            </div>
+                            <div class="col-3">
+                                <center><b>End Time</b></center>
+                                <input asp-for="Course.MeetingEndTime" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row mt-4 justify-content-center">
+                            <div class="col-md-9">
+                                <center><b>@Html.DisplayNameFor(model => model.Course.CourseDescription)</b></center>
+                                <textarea asp-for="Course.CourseDescription" class="form-control" rows="5" style="height: 9em;"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-2 justify-content-center">
+                            <div class="col-md-9">
+                                <center>
+                                    <input type="submit" value="Add Course" class="btn btn-primary" />
+                                    <a asp-page="Index" asp-route-id="@HttpContext.Session.GetString("UserId")">Back to List</a>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

@@ -1,0 +1,134 @@
+﻿@page
+@model WebApplicationHW1.Pages.TuitionModel
+@{
+    ViewData["Title"] = "Pay Tuition";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+
+
+}
+@using Microsoft.AspNetCore.Http
+@using WebApplicationHW1.Models;
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Pay Tuition</h2></center>
+        </div>
+        <hr />
+    </div>
+
+    <div class="row gutters-sm m-4">
+        <div class="col-md-4 mb-3">
+            <div class="card border-2 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex flex-column">
+                        <div class="row align-items-center text-center">
+                            <h4>Tuition:</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <small>Course Fees:</small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                $@Model.UserInfo.Tuition
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <small>Other Fees:</small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                $0
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <small>Taxes:</small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                $0
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row font-weight-bold h4">
+                            <div class="col-sm-6 text-right">
+                                <small><b>TOTAL:</b></small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                @if (Model.UserInfo.Tuition > 0)
+                                {
+                                    <span class="text-danger">$@Model.UserInfo.Tuition</span>
+                                }
+                                else
+                                {
+                                    <span class="">$@Model.UserInfo.Tuition</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-3 border-2 shadow">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8"> <span class="">CREDIT/DEBIT CARD PAYMENT</span> </div>
+                        <div class="col-md-4 text-right" style="margin-top: -5px;"> <img src="https://img.icons8.com/color/36/000000/visa.png"> <img src="https://img.icons8.com/color/36/000000/mastercard.png"> <img src="https://img.icons8.com/color/36/000000/amex.png"> </div>
+                    </div>
+                </div>
+                <div class="card-body font-weight-bold">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Pay.nameOnCard" class="control-label">CARD HOLDER NAME</label>
+                            <input asp-for="Pay.nameOnCard" class="input-lg form-control">
+                            <span asp-validation-for="Pay.nameOnCard" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Pay.cardNumber" class="control-label">CARD NUMBER</label>
+                            <input asp-for="Pay.cardNumber" id="cc-number" type="tel" class="input-lg form-control cc-number" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" required>
+                            <span asp-validation-for="Pay.cardNumber" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label type="month" asp-for="Pay.cardExpiration" class="control-label">EXPIRATION</label>
+                                    <input type="month" asp-for="Pay.cardExpiration" id="cc-exp" class="input-lg form-control cc-exp" autocomplete="cc-exp" placeholder="•• / ••" required>
+                                    <span type="month" asp-validation-for="Pay.cardExpiration" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label asp-for="Pay.cvcNumber" class="control-label">CVC</label>
+                                    <input asp-for="Pay.cvcNumber" id="cc-cvc" class="input-lg form-control cc-cvc" autocomplete="off" placeholder="••••" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Pay.totalPayment" class="control-label">AMOUNT</label>
+                                    <input asp-for="Pay.totalPayment" id="amount" class="input-lg form-control cc-cvc" autocomplete="off" placeholder="$" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input value="MAKE PAYMENT" type="submit" class="btn btn-primary btn-lg form-control" style="font-size: .8rem;">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

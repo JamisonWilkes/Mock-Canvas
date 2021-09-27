@@ -1,0 +1,174 @@
+﻿@page
+@model WebApplicationHW1.Pages.EditProfileModel
+@{
+    ViewData["Title"] = "Edit Profile";
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "Shared/_DashboardStudent.cshtml";
+            break;
+        case "Instructor":
+            //Adminins layout
+            Layout = "Shared/_DashboardInstructor.cshtml";
+            break;
+    }
+
+}
+@using Microsoft.AspNetCore.Http
+
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Edit Profile</h2></center>
+        </div>
+        <hr />
+    </div>
+    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Profile">
+        <div class="row gutters-sm m-4">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="rounded-circle img mx-auto m-4">
+                                <img src="@HttpContext.Session.GetString("ProfileImageFilePath")" runat="server" class="rounded-circle img" />
+                            </div>
+                            <div>
+
+                                <div class="row">
+                                    <h6 class="mb-0 text-center m-1">Select Image:</h6>
+                                </div>
+                                <div class="row mt-1 justify-content-center">
+                                    <div class="col-md-10">
+                                        <input class="form-control form-control-sm" type="file" name="postedFiles" multiple accept=".png,.jpg,.jpeg" />
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1 justify-content-center">
+                                    <div class="col-md-6">
+                                        <input class="form-control form-control-sm mt-2 bg-primary text-white" type="submit" value="Upload" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3 shadow-sm">
+                    <ul class="list-group list-group-flush social-media">
+
+                        <li class="list-group-item d-flex justify-content-between flex-wrap">
+                            <div class="col-2">
+                                <h6 class="mb-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-2 icon-inline text-dark"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></h6>
+                            </div>
+                            <div class="col-10">
+                                <input asp-for="UserInfo.Link1" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("Link1")" />
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between flex-wrap">
+                            <div class="col-2">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin mr-2 icon-inline text-dark"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></h6>
+                            </div>
+                            <div class="col-10">
+                                <input asp-for="UserInfo.Link2" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("Link2")" />
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between flex-wrap">
+                            <div class="col-2">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></h6>
+                            </div>
+                            <div class="col-10">
+                                <input asp-for="UserInfo.Link3" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("Link3")" />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">First Name</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.FirstName" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("FirstName")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">First Name</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.LastName" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("LastName")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.EmailAddress" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("EmailAddress")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">Birthday</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.BirthDate" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("BirthDate")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">Street Address</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.StreetAddress" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("StreetAddress")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">City</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.City" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("City")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">State</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.State" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("State")" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">Zip</h6>
+                            </div>
+                            <div class="col-sm-8 text-secondary">
+                                <input asp-for="UserInfo.Zip" class="form-control form-control-sm" placeholder="@HttpContext.Session.GetString("Zip")" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group text-secondary text-center mt-2 mb-0">
+                                    <input type="submit" value="Save" class="btn btn-sm btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

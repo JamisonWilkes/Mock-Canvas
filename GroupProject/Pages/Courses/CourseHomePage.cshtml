@@ -1,0 +1,280 @@
+﻿@page
+@model WebApplicationHW1.Pages.Courses.CourseHomePageModel
+@{
+    ViewData["Title"] = "Course Home Page";
+
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    //convert and format time from UTC to Standard
+    string startTime = Model.Course.MeetingStartTime.ToString(@"h\:mm");
+    string endTime = Model.Course.MeetingEndTime.ToString(@"h\:mm tt");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "_DashboardStudent";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "_DashboardInstructor";
+            break;
+    }
+
+}
+
+@using Microsoft.AspNetCore.Http
+<div class="container-fluid ms-4">
+    <div class="row">
+        <div class="col-md-12 main">
+            <center><h2 class="m-2">Course Details</h2></center>
+        </div>
+        <hr />
+    </div>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Course.CourseTitle)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Course.CourseTitle)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Course.Department)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Course.Department)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Course.CourseNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Course.CourseNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Description
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Course.CourseDescription)
+            </dd>
+            <dt class="col-sm-2">
+                Credits
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Course.Credits)
+            </dd>
+            <dt class="col-sm-2">
+                Meeting Days
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Course.MeetingDayOne) @Html.DisplayFor(model => model.Course.MeetingDayTwo) @Html.DisplayFor(model => model.Course.MeetingDayThree)
+            </dd>
+
+            <dt class="col-sm-2">
+                Meeting Time
+            </dt>
+            <dd class="col-sm-10">
+                @startTime - @endTime
+            </dd>
+
+        </dl>
+    </div>
+    <div>
+        @if (AccountType == "Instructor")
+        {
+            <!--<a asp-page="Create">Create New</a>-->
+            <h2>Student Grades</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            # Students Registered
+                        </th>
+                        <th>
+                            A
+                        </th>
+                        <th>
+                            A-
+                        </th>
+                        <th>
+                            B+
+                        </th>
+                        <th>
+                            B
+                        </th>
+                        <th>
+                            B-
+                        </th>
+                        <th>
+                            C+
+                        </th>
+                        <th>
+                            C
+                        </th>
+                        <th>
+                            C-
+                        </th>
+                        <th>
+                            D+
+                        </th>
+                        <th>
+                            D
+                        </th>
+                        <th>
+                            D-
+                        </th>
+                        <th>
+                            E
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @HttpContext.Session.GetInt32("totalNumStudentsInCourse")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentA")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentAMinus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentBPlus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentB")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentBMinus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentCPlus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentC")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentCMinus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentDPlus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentD")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentDMinus")
+                        </td>
+                        <td>
+                            @HttpContext.Session.GetInt32("numStudentE")
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+                    <tr>
+                        <th class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.studentRegistered[0].FirstName)
+                        </th>
+                        <th class="col-sm-5">
+                            @Html.DisplayNameFor(model => model.studentRegistered[0].LastName)
+                        </th>
+                        <th class="col-sm-10">
+                            @Html.DisplayNameFor(model => model.studentRegistered[0].LetterGrade)
+                        </th>
+
+                    </tr>
+                    @foreach (var thing in Model.studentRegistered)
+                    {
+                        <tr>
+                            <td class="col-sm-2">
+                                @Html.DisplayFor(modelItem => thing.FirstName)
+
+                            </td>
+                            <td class="col-sm-5">
+                                @Html.DisplayFor(modelItem => thing.LastName)
+                            </td>
+                            <td class="col-sm-10">
+                                @Html.DisplayFor(modelItem => thing.LetterGrade)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <a class="btn btn-primary m-4" asp-page=".\Assignment\Create" asp-route-id="@Model.Course.CourseID">Create Assignment</a>
+        }
+
+        @if (AccountType == "Student")
+        {
+
+            @foreach (var thing in Model.thisStudentRegistered)
+            {
+
+                <table>
+                    <tr>
+                        <td class="col-sm-10">
+                            <h2>Current Grade:</h2>
+
+                        </td>
+                        <td class="col-sm-10">
+                            <h3> @Html.DisplayFor(modelItem => thing.LetterGrade)</h3>
+                        </td>
+                    </tr>
+                </table>
+                   
+            }
+        }
+    </div>
+
+
+    <!-- code to display course assignments-->
+
+    <h2>My Current Assignments</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.assignments[0].AssignmentTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.assignments[0].AssignmentDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.assignments[0].AssignmentDueDate)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.assignments.OrderBy(item => item.AssignmentDueDate))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssignmentTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssignmentDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssignmentDueDate)
+                    </td>
+                    @if (AccountType == "Instructor")
+                    {
+                        <td>                            |
+                            <a asp-page="./Assignment/Delete" asp-route-id="@item.AssignmentID">Delete</a> |
+                            <a asp-page="./Assignment/Edit" asp-route-id="@item.AssignmentID">Edit</a> |
+                            <a class="btn btn-primary m-4" asp-page="./Assignment/Details" asp-route-id="@item.AssignmentID">View Submissions</a>
+                        </td>
+                    }
+                    @if (AccountType == "Student")
+                    {
+                        <td>
+                            <a class="btn btn-primary m-4" asp-page="./Assignment/Details" asp-route-id="@item.AssignmentID">Submit Assignment</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

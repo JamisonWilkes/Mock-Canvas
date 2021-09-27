@@ -1,0 +1,37 @@
+﻿@page
+@model WebApplicationHW1.Pages.Users.IndexModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<h1>User Information</h1>
+
+<p>
+    <a asp-page="Create">Sign Up Now!!</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserInfo[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserInfo[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserInfo[0].EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserInfo[0].Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserInfo[0].BirthDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+<form>
+    <p><a href="https://localhost:5001">Sign In!!</a></p>
+</form>

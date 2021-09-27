@@ -1,0 +1,28 @@
+﻿@page
+@model WebApplicationHW1.Models.Course
+@{
+    ViewData["Title"] = "Student Registration";
+    string AccountType = HttpContext.Session.GetString("AccountType");
+
+    switch (AccountType)
+    {
+        case "Student":
+            Layout = "Shared/_DashboardStudent.cshtml";
+            break;
+        case "Instructor":
+            //Admin layout
+            Layout = "Shared/_DashboardInstructor.cshtml";
+            break;
+    }
+
+}
+@using Microsoft.AspNetCore.Http
+
+
+
+<div class="text-center">
+    <a asp-page="">Register For a New Course</a>
+</div>
+
+   
+  

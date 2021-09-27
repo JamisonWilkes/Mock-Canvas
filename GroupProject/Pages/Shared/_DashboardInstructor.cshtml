@@ -1,0 +1,49 @@
+﻿@using WebApplicationHW1.Models;
+@using Microsoft.AspNetCore.Http
+@{ string userId = Context.Session.GetString("UserId");
+    string profileImage = Context.Session.GetString("ProfileImageFilePath");
+    }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>@ViewData["Title"] - Dashboard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="wrapper d-flex">
+        <div class="sidebar">
+            <div class="rounded-circle img mx-auto m-4">
+                <img src="@profileImage" runat="server" class="rounded-circle img" />
+            </div>
+
+            <div class="list-group text-center">
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="#!">Instructor </a>
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="/Profile?id=@userId">Profile</a>
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="/Dashboard?id=@userId">Dashboard</a>
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="/Courses?id=@userId">Course List</a>
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="/Calendar?id=@userId">Calendar</a>
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="#!">Inbox</a>
+                <a class="list-group-item list-group-item-action list-group-item-dark p-2" href="#!">Help</a>
+                <a id="logoutButton" class="list-group-item list-group-item-action list-group-item-dark p-2" asp-page="/Index" asp-page-handler="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>
